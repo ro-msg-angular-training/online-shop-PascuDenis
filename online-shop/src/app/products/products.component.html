@@ -1,4 +1,4 @@
-<div class="flex-container">
+<!-- <div class="flex-container">
 
   <label for="id">ID: </label>
   <input [value]="id" (input)="id = $event.target.value" type="text" id="id">
@@ -46,4 +46,12 @@
     <td>{{product.supplierId}}</td> 
     <td>{{product.imageUrl}}</td>
   </tr>
-</table>
+</table> -->
+<h2>My products</h2>
+<ul class="products">
+  <li *ngFor="let product of products" [class.selected]="product === selectedProduct">
+    <nav>
+      <a routerLink="{{product.id}}"><span class="badge">{{product.id}}</span> {{product.name}}</a>
+    </nav>
+  </li>
+</ul>
