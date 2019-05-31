@@ -7,6 +7,7 @@ import { ProductService } from '../product.service';
 import { Product } from '../product';
 import { Category } from '../category';
 import { Supplier } from '../supplier';
+import { async } from '@angular/core/testing';
 
 @Component({
   selector: 'app-product-detail',
@@ -15,6 +16,8 @@ import { Supplier } from '../supplier';
 })
 export class ProductDetailComponent implements OnInit {
   product: Product;
+  category: Category;
+  supplier: Supplier;
 
   constructor(
     private route: ActivatedRoute,
@@ -25,7 +28,7 @@ export class ProductDetailComponent implements OnInit {
 
   ngOnInit() {
     this.getProduct();
-    this.id = +this.route.snapshot.paramMap.get('id'); 
+    this.id = +this.route.snapshot.paramMap.get('id');
     this.getCategories();
     this.getSuppliers();
     // console.log("haha"); 
@@ -43,7 +46,7 @@ export class ProductDetailComponent implements OnInit {
   supplierId: number;
   imageUrl: string;
 
-  categories: Category[]; 
+  categories: Category[];
   idCategory: number;
   nameCategory: string;
 
@@ -54,13 +57,17 @@ export class ProductDetailComponent implements OnInit {
 
   error = false;
   errorMessage = '';
+  
+  submitted = false;
+ 
+  onSubmit() { this.submitted = true; }
 
   getProduct(): void {
     const id = +this.route.snapshot.paramMap.get('id');
     console.log(id);
     this.productService.getProduct(id)
       .subscribe(product => this.product = product);
-    console.log(" " + this.product)
+    console.log(" " + this.product);
   }
 
   getCategories(): void {
@@ -86,24 +93,29 @@ export class ProductDetailComponent implements OnInit {
   goBack(): void {
     this.location.back();
   }
+  
 
-  public addProduct() {
+  public addProduct(productName :string, productDescription: string, productPrice: number, productWeight: number, productCategoryId: number, productSupplierId: number ) {
     const product = new Product();
     product.id = this.id;
-    product.name = this.name;
-    product.description = this.description;
-    product.price = this.price;
-    product.weight = this.weight;
-    product.productCategoryId = this.productCategoryId;
-    product.supplierId = this.supplierId;
+    product.name = productName;
+    product.description = productDescription;
+    product.price = productPrice;
+    product.weight = productWeight;
+    product.productCategoryId = productCategoryId;
+    product.supplierId = productSupplierId;
 
+    console.log("alalaa" + productName);
     console.log(product.id);
-    console.log(product.name);
+    console.log(productName);
     console.log(product.description);
     console.log(product.price);
     console.log(product.weight);
     console.log(product.productCategoryId);
     console.log(product.supplierId);
+
+    // this.productService.addProduct(product);
+    // this.goBack();
 
     this.http.post<Product>('http://localhost:8080/product/save', product)
       .subscribe((response) => {
@@ -114,7 +126,6 @@ export class ProductDetailComponent implements OnInit {
         console.log(error1);
       });
   }
-
 
   public removeProduct() {
     var productId = +this.route.snapshot.paramMap.get('id');
@@ -131,16 +142,24 @@ export class ProductDetailComponent implements OnInit {
       });
   }
 
-  public updateProduct() {
+  public updateProduct(productName :string, productDescription: string, productPrice: number, productWeight: number, productCategoryId: number, productSupplierId: number ) {
     const product = new Product();
     var productId = +this.route.snapshot.paramMap.get('id');
     product.id = productId;
-    product.name = this.name;
-    product.description = this.description;
-    product.price = this.price;
-    product.weight = this.weight;
-    product.productCategoryId = this.productCategoryId;
-    product.supplierId = this.supplierId;
+    product.name = productName;
+    product.description = productDescription;
+    product.price = productPrice;
+    product.weight = productWeight;
+    product.productCategoryId = productCategoryId;
+    product.supplierId = productSupplierId;
+
+    console.log(product.id);
+    console.log(productName);
+    console.log(product.description);
+    console.log(product.price);
+    console.log(product.weight);
+    console.log(product.productCategoryId);
+    console.log(product.supplierId);
     this.http.put('http://localhost:8080/product/update/' + productId, product).
       subscribe((response) => {
         this.error = false;
@@ -152,4 +171,33 @@ export class ProductDetailComponent implements OnInit {
       });
   }
 
+  getCategoryById(id: number): void {
+    console.log("pc - getCategoryById")
+    console.log(id)
+
+    this.productService.getCategoryById(id)
+      .subscribe(category => {
+        this.category = category;
+        // this.idCategory = category.id;
+        // this.nameCategory = category.name;
+        // console.log(this.idCategory + "  " + this.nameCategory  )
+      });
+    console.log(this.productService.getCategoryById(id))
+    console.log(" " + this.category);
+  }
+
+  getSupplierById(id: number): void {
+    console.log("pc - getSupplierById")
+    console.log(id)
+
+    this.productService.getSupplierById(id)
+      .subscribe(supplier => {
+        this.supplier = supplier;
+        // this.idSupplier = supplier.id;
+        // this.nameSupplier = supplier.name;
+        // console.log(this.idSupplier + "  " + this.nameSupplier  )
+      });
+    console.log(this.productService.getSupplierById(id))
+    console.log(" " + this.supplier);
+  }
 }

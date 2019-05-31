@@ -3,64 +3,68 @@
   <!-- <div><span>ID: </span>{{product.id}}</div> -->
 
   <div>
-    <!-- <label>ID:<br>
-      <input [(ngModel)]="product.id" placeholder="id"/><br>
-    </label>
-    <label>Name:<br>
-      <input [(ngModel)]="product.name" placeholder="name"/><br>
-    </label>
-    <label>Description:<br>
-      <input [(ngModel)]="product.description" placeholder="description"/><br>
-    </label>
-    <label>Price:<br>
-      <input [(ngModel)]="product.price" placeholder="price"/><br>
-    </label>
-    <label>Weight:<br>
-      <input [(ngModel)]="product.weight" placeholder="weight"/><br>
-    </label>
-    <label>Category:<br>
-      <input [(ngModel)]="product.productCategoryId" placeholder="productCategoryId"/><br>
-    </label>
-    <label>Supplier:<br>
-      <input [(ngModel)]="product.supplierId" placeholder="supplierId"/><br>
-    </label><br>   -->
-    <label for="id">ID: </label>
-    <input [value]="this.id" (input)="id = $event.target.value" type="text" id="id">
-    <label for="name">Name: </label>
-    <input [value]="this.name" (input)="name = $event.target.value" type="text" id="name">
-    <label for="description">Description: </label>
-    <input [value]="description" (input)="description = $event.target.value" type="text" id="description">
-    <label for="price">Price: </label>
-    <input [value]="price" (input)="price = $event.target.value" type="text" id="price">
-    <label for="weight">Weight: </label>
-    <input [value]="weight" (input)="weight = $event.target.value" type="text" id="weight">
-    <label for="productCategoryId">Categoty ID: </label>
-    <!-- <input [value]="productCategoryId" (input)="productCategoryId = $event.target.value" type="text" id="productCategoryId"> -->
+    <form (ngSubmit)="onSubmit()" #productForm="ngForm">
+      <label for="id">ID: </label>
+      <input [value]="this.id" (input)="id = $event.target.value" type="text" id="id">
 
-    <select>
-      <option [value]="category" *ngFor="let category of categories" [class.selected]="category === selectedCategory">
-        {{category.name}}</option>
-    </select>
-    <label for="supplierId">Supplier ID: </label>
-    <!-- <input [value]="supplierId" (input)="supplierId = $event.target.value" type="text" id="supplierId"> -->
-    <select>
-      <option [value]="supplier" *ngFor="let supplier of suppliers" [class.selected]="supplier === selectedSupplier">
-        {{supplier.name}}</option>
-    </select>
+      <div class="form-group">
+        <label for="name">Name: </label>
+        <input type="text" class="form-control" id="name" required [(ngModel)]="product.name" name="name"
+          [value]="this.name" (input)="name = $event.target.value">
+        <!-- <div [hidden]="name.valid || name.pristine" class="alert alert-danger">
+          Name is required
+        </div> -->
+      </div>
+
+      <div class="form-group">
+        <label for="description">Description: </label>
+        <input type="text" class="form-control" id="description" required [(ngModel)]="product.description"
+          name="description" [value]="this.description" (input)="description = $event.target.value">
+      </div>
+
+      <div class="form-group">
+        <label for="price">Price: </label>
+        <input type="text" class="form-control" id="price" required [(ngModel)]="product.price" name="price"
+          [value]="this.price" (input)="price = $event.target.value">
+      </div>
+
+      <div class="form-group">
+        <label for="weight">Weight: </label>
+        <input type="text" class="form-control" id="weight" required [(ngModel)]="product.weight" name="weight"
+          [value]="this.weight" (input)="weight = $event.target.value">
+      </div>
+
+      <div class="form-group">
+        <label for="productCategoryId">Categoty ID: </label>
+        <select [(ngModel)]="product.productCategoryId" (change)="getCategoryById($event.target.value)" id="category"
+          name="category">
+          <option *ngFor="let category of categories" value="{{category.id}}"
+            [class.selected]="category === selectedCategory">
+            {{category.name}}</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="supplierId">Supplier ID: </label>
+        <select [(ngModel)]="product.supplierId" (change)="getSupplierById($event.target.value)" id="supplier"
+          name="supplier">
+          <option *ngFor="let supplier of suppliers" value="{{supplier.id}}"
+            [class.selected]="supplier === selectedSupplier">
+            {{supplier.name}}</option>
+        </select>
+      </div>
+    </form>
   </div>
 
   <br>
   <br>
 
   <button (click)="goBack()">go back</button>
-  <button type="button" (click)="addProduct()" id="addButton">Adauga</button>
-  <button type="button" (click)="removeProduct()" id="deleteButton">Stergere</button>
-  <button type="button" (click)="updateProduct()" id="updateButton">Update</button>
+  <button type="submit"
+    (click)="addProduct(product.name, product.description, product.price, product.weight, product.productCategoryId, product.supplierId)"
+    id="addButton">Adauga</button>
+  <button type="submit" (click)="removeProduct()" id="deleteButton">Stergere</button>
+  <button type="submit"
+    (click)="updateProduct(product.name, product.description, product.price, product.weight, product.productCategoryId, product.supplierId)"
+    id="updateButton">Update</button>
 </div>
-<!-- 
-<h2>My categories</h2>
-<ul class="category">
-  <li *ngFor="let category of categories" [class.selected]="category === selectedCategory">
-    <span class="badge">{{category.id}}</span> {{category.name}}
-  </li>
-</ul> -->
