@@ -1,0 +1,77 @@
+<!-- <div class="flex-container">
+
+  <label for="id">ID: </label>
+  <input [value]="id" (input)="id = $event.target.value" type="text" id="id">
+  <label for="name">Name: </label>
+  <input [value]="name" (input)="name = $event.target.value" type="text" id="name">
+  <label for="description">Description: </label>
+  <input [value]="description" (input)="description = $event.target.value" type="text" id="description">
+  <label for="price">Price: </label>
+  <input [value]="price" (input)="price = $event.target.value" type="text" id="price">
+  <label for="weight">Weight: </label>
+  <input [value]="weight" (input)="weight = $event.target.value" type="text" id="weight">
+  <label for="productCategoryId">Categoty ID: </label>
+  <input [value]="productCategoryId" (input)="productCategoryId = $event.target.value" type="text" id="productCategoryId">
+  <label for="supplierId">Supplier ID: </label>
+  <input [value]="supplierId" (input)="supplierId = $event.target.value" type="text" id="supplierId">
+  <label for="imageUrl">ImageUrl: </label>
+  <input [value]="imageUrl" (input)="imageUrl = $event.target.value" type="text" id="imageUrl">
+
+  <button type="button" (click)="addProduct()" id="addButton">Adauga</button>
+  <button type="button" (click)="removeProduct()" id="deleteButton">Stergere</button>
+  <button type="button" (click)="updateProduct()" id="updateButton">Update</button>
+
+</div>
+
+<div id="errorDiv" class="errorDiv" *ngIf="error"><p>{{errorMessage}}</p></div>
+
+<table class="tableProps" id="noteTable">
+  <tr>
+    <th>ID</th>
+    <th>Name</th>
+    <th>Description</th>
+    <th>Price</th>
+    <th>Weight</th>
+    <th>Caregory ID</th>
+    <th>Supplier ID</th>
+    <th>ImageUrl</th>
+  </tr>
+  <tr *ngFor="let product of products">
+    <td>{{product.id}}</td>
+    <td>{{product.name}}</td>
+    <td>{{product.description}}</td>
+    <td>{{product.price}}</td>
+    <td>{{product.weight}}</td>
+    <td>{{product.productCategoryId}}</td>
+    <td>{{product.supplierId}}</td> 
+    <td>{{product.imageUrl}}</td>
+  </tr>
+</table> -->
+<h2>My products</h2>
+
+<form (ngSubmit)='addToCart($event)' id='productInput'>
+  <ul class="products">
+    <li *ngFor="let product of products" [class.selected]="product === selectedProduct">
+      <div class="flex-container">
+        <nav>
+          <a routerLink="{{product.id}}"><span class="badge">{{product.id}}</span> {{product.name}}</a>
+        </nav>
+        <!-- <select id="quantity" value="0" #quantity>
+        <option value="1"></option>
+        <option value="2"></option>
+        <option value="3"></option>
+        <option value="4"></option>
+        <option value="5"></option>
+        <option value="6"></option>
+        <option value="7"></option>
+        <option value="8"></option>
+        <option value="9"></option>
+        <option value="10"></option>
+      </select> -->
+        <!-- <br> -->
+        <input id="quantity" value="0" #quantity />
+        <button type="button" (click)="addToCart(product.id, quantity.value)">Add to cart</button>
+      </div>
+    </li>
+  </ul>
+</form>
