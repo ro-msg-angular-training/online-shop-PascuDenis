@@ -56,6 +56,10 @@ export class ProductsComponent implements OnInit {
   }
 
   addToCart(productId: number, productQuantity:number):void{
-    this.cartService.createOrder(productId, productQuantity);
+    this.cartService.addToCart(productId, productQuantity);
+  }
+
+  placeOrder():void{
+     this.cartService.createOrder(); 
   }
 }

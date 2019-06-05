@@ -2,54 +2,66 @@ import { Injectable } from '@angular/core';
 import { HttpHeaders, HttpClient } from '@angular/common/http';
 import { Address } from './address';
 import { OrderInput } from './orderInput';
+import { ProductInput } from './productInput';
 
-var inputProductList: Array<{id: number, quantity: number }> = [];
-
-// inputProductList = [{ address: address, id: 1, quantity: 1 }];
-
-var orderInput: OrderInput;
+const httpOptions = {
+  headers: new HttpHeaders({ 'Content-Type': 'application/json' })
+};
 
 @Injectable({
   providedIn: 'root'
-})  
+})
 
 
 export class CartService {
+  orderUrl = 'http://localhost:8080/order';
+  orderProducts: ProductInput[] = [];
+  address: Address;
+  inputOrder: OrderInput;
 
-
-  constructor(
-    private http: HttpClient  
-    ) { }
-
-  createOrder(productId: number, productQuantity: number): void {
-    var address: Address = {
-      id: 1,
-      country: "AddressCountry01",
-      city: "AddressCity01",
-      county: "AddressCounty01",
-      street: "AddressStreetAddress01"
+  addToCart(productId: number, productQuantity: number) {
+    if (productQuantity < 1) {
+      console.log("quantity must not be zero!");
+      alert("quantity must not be zero!")
+      return;
     }
 
     console.log(productId + "    " + productQuantity);
-    inputProductList.push({id: productId, quantity: productQuantity });
-    console.log(inputProductList);
+    this.orderProducts.push(new ProductInput(productId, productQuantity));
+    console.log(this.orderProducts);
+  }
 
-    console.log(address);
-    // orderInput.productAddress = add;
+  constructor(
+    private http: HttpClient
+  ) { }
 
-    // orderInput.productAddress = address;
-    // orderInput.productInputList = inputProductList;
+  createOrder() {
+    if (this.orderProducts.length === 0) {
+      console.log("a product was not selected");
+      alert("a product was not selected")
+      return;
+    }
 
-    // console.log(this.orderInput);
-    // this.http.post<Product>('http://localhost:8080/product/save', product)
-    // .subscribe((response) => {
-    //   this.error = false;
-    //   this.goBack();
-    // }, (error1) => {
-    //   this.error = true;
-    //   this.errorMessage = error1.error.message;
-    //   console.log(error1);
-    // });
-    
+    this.address = new Address(
+      1,
+      "AddressCountry01",
+      "AddressCity01",
+      "AddressCounty01",
+      "AddressStreetAddress01"
+    );
+
+    this.inputOrder = new OrderInput(
+      this.address,
+      this.orderProducts
+    );
+
+    console.log(this.inputOrder);
+    let orderToBePlaced = this.inputOrder;
+
+    this.http.post<OrderInput>(this.orderUrl, orderToBePlaced)
+      .subscribe((response) => {
+      }, (error1) => {
+        console.log(error1);
+      });
   }
 }
